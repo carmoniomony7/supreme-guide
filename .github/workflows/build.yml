@@ -1,0 +1,28 @@
+name: Build APK
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-android:
+    name: Criar APK Android
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar projeto
+        uses: actions/checkout@v4
+
+      - name: Compilar com Buildozer
+        uses: ArtemSBulgakov/buildozer-action@v1
+        id: buildozer
+        with:
+          workdir: .
+          buildozer_version: stable
+          command: buildozer android debug
+
+      - name: Guardar APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: MEU-CARRO-APK
+          path: ${{ steps.buildozer.outputs.filename }}
